@@ -57,7 +57,9 @@ def SignUpView(request):
             email_from ='manavshah1011.ms@gmail.com'
             recipirent_list=[request.POST.get('email'),]
             print(send_mail(subject, plain_message, email_from, recipirent_list, html_message=html_message,fail_silently=False))
-            form.save()
+            user=form.save(commit=False)
+            user.is_active=False
+            user.save()
             return HttpResponseRedirect(reverse('accounts:check'))
         except Exception as e:
             print(e)
