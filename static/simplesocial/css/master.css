@@ -1,0 +1,22 @@
+*{
+  font-family: 'Fira Code', monospace;
+}
+
+body {
+  height:100%;
+  margin: 0;
+  overflow:scroll;
+}
+.nav{
+  font-size: smaller;
+}
+
+/* .dark-mode-nav{
+  color: white;
+}
+.light-mode-nav{
+  color: black;
+} */
+.searched-item{
+    border-radius: 0 !important;
+}

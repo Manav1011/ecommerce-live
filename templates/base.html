@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+{% load static %}
+{% load bootstrap4 %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CSS only -->
+    <!-- CSS only -->
+   {% include 'links.html' %}
+
+{% include 'nav.html'%}
+<div class="container  d-flex align-items-center justify-content-center mt-3" style="margin-left:auto;">
+<div class="list-group guesseditembox" style='z-index: 99; text-align: center;'></div>
+</div>
+</head>
+
+<body id="content">
+        <div class="container">
+        {% include 'themes.js.html' %}
+        
+    {% block content %}
+    <div class="container text-center mt-5">
+<h1 >This is the home page of eCommerce</h1>
+
+{{authentication_form}}
+</div>{% endblock content %}
+    
+</div>
+
+
+<canvas id="canvas" style="position:fixed; top:0; z-index: -1;" class=''></canvas>
+</body>
+<script src="{% static 'simplesocial/js/csrf.ajax.js' %}"></script>
+
+{% include 'searching_and_cart.html' %}
+
+
+{% comment %} Modals {% endcomment %}
+<div class="modal fade" id="signupmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        {% include 'signup.html' %}
+    </div>
+  </div>
+
+  <div class="modal fade" id="loginmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+                {% include 'login.html' %}
+                
+    </div>
+  </div>
+
+  <div class="modal fade" id="change_password" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+                {% include 'password_change_form.html' %}
+                
+    </div>
+  </div>
+
+  <div class="modal fade" id="contactmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+                {% include 'contact/contact_page.html' %}
+                
+    </div>
+  </div>
+
+  <div class="modal fade" id="resetpassword" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="container text-center mt-5 card  border shadow-lg p-3 mb-5 rounded bg-gradient modal-content resetpasswordmodal" id='other-components'>
+        <form action="{% url 'accounts:username_for_reset_password' %}" method="post" id="submit_username">
+          {% csrf_token %}
+          {%bootstrap_form usernameforpasswordresetform%}
+          <br>
+          <div class="" role="status" id='spinner-div'>
+        <input type="submit" value="Submit" class="btn btn-primary mt-3 form-control resetbutton">
+          </div>
+          
+          <div id='resetcancel'>
+        <input type="button" value="Cancel" class="btn btn-danger mt-3 form-control" data-bs-dismiss="modal" aria-label="Close">
+      </div>
+      </form> 
+      </div>
+      
+</div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      $('#submit_username').submit(function(event){
+        $('.resetpasswordmodal').html(`<div class="alert alert-primary" role="alert">
+          Sending Mail....
+        </div>`)
+          event.preventDefault()
+          thisForm=$(this)
+          actionurl=thisForm.attr('action')
+          formmethod=thisForm.attr('method')
+          data=thisForm.serialize()
+          $.ajax({
+            url:actionurl,
+            method:'POST',
+            data:data,
+            success:function(response){
+              $('#spinner-div').removeClass('spinner-border text-primary')
+              console.log(response)
+              $('.resetpasswordmodal').html(`<div class="alert alert-success" role="alert">
+                Password reset link has been sent to you email
+              </div>`)
+            },
+            error:function(errorData){
+              console.log(errorData)
+            }          
+          })
+      })  
+
+
+
+      $('#logout').click(function(event) {
+        event.preventDefault()
+        $.ajax({
+          url: `{% url 'logout' %}`,
+          method: 'GET',
+          success: function(response){  
+            window.history.pushState({page: "another"}, "another page", "{% url 'home' %}");
+            $('body').load(`{% url 'home' %}`)
+          },
+          error:function(errorData){
+            console.log(errorData)
+          }
+        })
+      })
+    })
+  </script>
+  <noscript>
+    <div class="container-fluid">
+    Please enable javascript to view this page in best condition!!
+  </div>
+  </noscript>
+</html>
