@@ -93,13 +93,13 @@
           Sending Mail....
         </div>`)
           event.preventDefault()
-          thisForm=$(this)
-          actionurl=thisForm.attr('action')
-          formmethod=thisForm.attr('method')
-          data=thisForm.serialize()
+          var thisForm=$(this)
+          var actionurl=thisForm.attr('action')
+          var formmethod=thisForm.attr('method')
+          var data=thisForm.serialize()
           $.ajax({
             url:actionurl,
-            method:'POST',
+            method:formmethod,
             data:data,
             success:function(response){
               $('#spinner-div').removeClass('spinner-border text-primary')
