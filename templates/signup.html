@@ -5,15 +5,7 @@
     <h1>Welcome To SignUp Page</h1>
 <form action="{% url 'accounts:signup' %}" method="post">
     {% csrf_token %}
-    {% if signup_form.non_field_errors %}
-    {% for error in signup_form.non_field_errors %}
-        <p>{{error}}</p>
-    {% endfor %}
-    {% endif %}
-    {% for fm in signup_form %}
-        {{fm.label_tag}}{{fm}}{{fm.errors | striptags}} <br><br>
-    {% endfor %}
-    
+    {%bootstrap_form signup_form%}
     <input type="submit" value="SignUp" class="btn btn-primary mt-3 form-control">
     <input type="btn" value="Cancel" class="btn btn-danger mt-3 form-control" data-bs-dismiss="modal" aria-label="Close">
 
