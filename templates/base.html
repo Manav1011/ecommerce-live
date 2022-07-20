@@ -123,7 +123,7 @@
           method: 'GET',
           success: function(response){  
             window.history.pushState({page: "another"}, "another page", "{% url 'home' %}");
-            $('body').load(`{% url 'home' %}`)
+            window.location.reload();
           },
           error:function(errorData){
             console.log(errorData)
