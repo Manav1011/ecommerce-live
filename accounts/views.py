@@ -61,12 +61,8 @@ def SignUpView(request):
             print(e)
             return HttpResponseRedirect(reverse('accounts:exists'))
     else:
-        d=form.errors.as_data()
-        errors=[]
-        for i in d.values():
-            for j in i:
-                errors.append(str(j))
-        return JsonResponse({'errors':errors,'type':'error'},safe=False)
+        
+        return JsonResponse({'errors':form.errors.as_json(),'type':'error'},safe=False)
 
     
 def active_account(request,username):
