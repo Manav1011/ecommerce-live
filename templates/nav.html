@@ -1,5 +1,5 @@
 {% load bootstrap4 %}
-<nav class="navbar navbar-expand-xl shadow-5-strong bg-gradient opacity-100" id="nav">
+<nav class="navbar navbar-expand-xl navbar-dark shadow-5-strong bg-gradient opacity-100" id="nav">
     <div class="container-fluid">
       <span class="navbar-brand">eCommerce</span>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,9 +58,6 @@
       {% include 'search/snippets/search-form.html' %}
   
         <ul class="navbar-nav me-5">
-          <li class="nav-item" style="margin-top:10px;">
-            <a href="{% url 'dark_mode' %}" class="dark_theme me-5"></a>
-          </li>
           <li class="nav-item">
             <a class="nav-link position-relative" href={% url 'carts:cart_home' %}>
                 <i class="bi bi-cart" style="font-size:2rem;"></i>

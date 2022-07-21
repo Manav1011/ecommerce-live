@@ -1,4 +1,5 @@
 from django.forms import PasswordInput
+import json
 from django.shortcuts import render,redirect
 from django.urls import reverse,reverse_lazy
 from django.views.generic import CreateView
@@ -20,7 +21,6 @@ from django.contrib.auth import update_session_auth_hash
 from django.template import Template
 
 
-
 # Create your views here.
 
 def LoginView(request):
@@ -38,17 +38,15 @@ def LoginView(request):
                 return JsonResponse({'form':form.cleaned_data})
             return HttpResponseRedirect(reverse('home'))
         else:
-            print('User not found')
+            print('User not found')   
     else:
-            # If there were errors, we render the form with these
-            # errors
         form= AuthenticationForm()
     return HttpResponseRedirect(reverse('home'))
     
 
 
 def SignUpView(request):
-    form=forms.SignUpForm(request.POST or None)
+    form=forms.SignUpForm(request.POST or None)    
     if form.is_valid():
         try:
             subject='Account Activation From eCommerce Website'
@@ -57,15 +55,18 @@ def SignUpView(request):
             email_from ='manavshah1011.ms@gmail.com'
             recipirent_list=[request.POST.get('email'),]
             print(send_mail(subject, plain_message, email_from, recipirent_list, html_message=html_message,fail_silently=False))
-            user=form.save(commit=False)
-            user.is_active=False
-            user.save()
-            return HttpResponseRedirect(reverse('accounts:check'))
+            form.save()
+            return JsonResponse({'url':'accounts:check','type':'success'})
         except Exception as e:
             print(e)
             return HttpResponseRedirect(reverse('accounts:exists'))
     else:
-        return HttpResponseRedirect(reverse('accounts:exists'))
+        d=form.errors.as_data()
+        errors=[]
+        for i in d.values():
+            for j in i:
+                errors.append(str(j))
+        return JsonResponse({'errors':errors,'type':'error'},safe=False)
 
     
 def active_account(request,username):
@@ -90,7 +91,8 @@ def check_your_email(request):
 
 
 def username_for_reset_password(request):
-    if request.method=='POST':
+    try:
+        print(request.POST)
         username_for_reset_password.counter=0
         user_obj=User.objects.get(username=request.POST.get('username'))
         subject='Password Reset Link'
@@ -98,8 +100,11 @@ def username_for_reset_password(request):
         plain_message = strip_tags(html_message)
         email_from ='manavshah1011.ms@gmail.com'
         recipirent_list=[user_obj.email,]
-        print(send_mail(subject, plain_message, email_from, recipirent_list, html_message=html_message,fail_silently=False))    
-        return JsonResponse({'context':'Form has been submitted'})
+        print(send_mail(subject, plain_message, email_from, recipirent_list, html_message=html_message,fail_silently=False)) 
+        return HttpResponse('Form has been submitted')
+    except Exception as e:
+        print(e)
+        return HttpResponse('Form has not been submitted')
     
 def reset_password_page(request,username):
     context={
