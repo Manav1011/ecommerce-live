@@ -28,7 +28,6 @@ from carts.views import cart_detail_api_view
 from search.views import getProducts
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     re_path('^$',ecommerceview.HomeView.as_view(),name='home'),
     re_path('^contact/$',ecommerceview.ContactView,name='contact'),
     re_path(r'^login/$',login_view,name='login'),
