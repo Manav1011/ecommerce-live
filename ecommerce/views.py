@@ -1,4 +1,3 @@
-from operator import is_
 from django.views.generic import TemplateView
 from django.shortcuts import render
 from django.core.mail import send_mail

@@ -1,5 +1,3 @@
-from distutils.command.clean import clean
-from tkinter import S
 from django.forms import PasswordInput
 import json
 from django.shortcuts import render,redirect
