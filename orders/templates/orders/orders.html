@@ -46,7 +46,7 @@
         {% for i in object %}
       <tr class="">
         <th>{{i.order_id}}</th> 
-        <th>{{i.shipping_address}}</th> 
+        <th>{{i.billing_address}}</th> 
         <td>{{i.status}}</td>
         <td>{% for j in i.cart.products.all %}
           <a href={% url 'product:product_detail' slug=j.slug %}>{{j}}</a>,
