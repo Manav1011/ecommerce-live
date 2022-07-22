@@ -45,11 +45,11 @@
                         </div>
                         <div class="alert alert-danger" role="alert">
                             <li>If you did not recieve the activation link</li>
-                        <li>Then please provide a valid email <div class='container text-center'><button id='fillagain' class='btn btn-warning'>Fill Again</button></div></li>
+                        <li>Then please provide a valid email <div class='container text-center'><button id='signupfillagain' class='btn btn-warning'>Fill Again</button></div></li>
                         </div>
                     </div>
                         `)
-                        $('#fillagain').click(function(){
+                        $('#signupfillagain').click(function(){
                             $('.signupformdiv').show()
                             $('.successalert').remove()
                         })
@@ -57,15 +57,15 @@
                     else if(response.Exception =='occured'){
                         $('.sending').remove();
                         $('.signupformdiv').hide()
-                        $('.signupdiv').prepend(`<div class="alert alert-danger exceptionalert" role="alert">
+                        $('.signupdiv').prepend(`<div class="alert alert-danger signupexceptionalert" role="alert">
                             ${response.content}
                             <span>Check you internet connection</span>
-                            <div class='container text-center'><button id='fillagain' class='btn btn-warning'>Fill Again</button></div>
+                            <div class='container text-center'><button id='signupfillagain' class='btn btn-warning'>Fill Again</button></div>
                         </div>
                         `)
-                        $('#fillagain').click(function(){
+                        $('#signupfillagain').click(function(){
                             $('.signupformdiv').show()
-                            $('.exceptionalert').remove()
+                            $('.signupexceptionalert').remove()
                         })
                     }
                     else if(response.type=='error'){
@@ -75,9 +75,9 @@
                        
                         $('.signupdiv').prepend(`<div class="alert alert-danger erroralert" role="alert">
                             <li>${response.errors}</li>
-                                <div class='container text-center'><button id='fillagain' class='btn btn-warning'>Fill Again</button></div>
+                                <div class='container text-center'><button id='signupfillagain' class='btn btn-warning'>Fill Again</button></div>
                           </div>`)
-                          $('#fillagain').click(function(){
+                          $('#signupfillagain').click(function(){
                             
                             $('.signupformdiv').show()
                             $('.erroralert').remove()
