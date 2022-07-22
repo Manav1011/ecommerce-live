@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container">
     <div class="container text-center card shadow-lg rounded"style="width:45vh;" id="other-components">
-        <img src="{{products.image}}" class="card-img-top mt-2 rounded" alt="Image is not available" width="100%" height="100%">
+        <img src="{{products.image}}" class="card-img-top mt-2 rounded" alt="..." width="100%" height="100%">
         <div class="card-body">
           <h5 class="card-title">Title: {{products.title}}</h5>
           <p class="card-text">Description: {{products.description}}</p>
@@ -10,7 +10,7 @@
           <br>
           {% include 'product/update_cart.html' with product=object cart=cart %}
           <br>
-          <a href='{% url 'product:products' %}' class="btn btn-outline-primary form-control">Go Back</a>
+          <button class="btn btn-outline-primary form-control" onclick='history.back()'>Go Back</button>
         </div>
     </div>
 </div>
