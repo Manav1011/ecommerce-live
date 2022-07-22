@@ -8,6 +8,11 @@ from django.urls import reverse
 from tags.models import Tag
 import re
 
+PRODUCT_CATAGORIES=(
+    ('wearable','Wearable'),
+    ('digital','Digital')
+)
+
 def get_filename_ext(filepath):
     base_name=os.path.basename(filepath)
     name,ext=os.path.splitext(filepath)
@@ -65,6 +70,7 @@ class Product(models.Model):
     featured=models.BooleanField(default=False)
     active=models.BooleanField(default=True)
     timestemp=models.DateTimeField(auto_now_add=True)
+    catagories=models.CharField(max_length=255,default='wearable',choices=PRODUCT_CATAGORIES)
     
     objects=ProductManager()
     
