@@ -74,16 +74,17 @@ def active_account(request,username,token):
             print(SignUpView.rand_token)
             return HttpResponseRedirect(reverse('accounts:activated'))
         else:        
-            return HttpResponse(r'Your Account is already activated.')
+            return HttpResponseRedirect(reverse('accounts:expired'))
     except:
         print('exception occured')
-        return HttpResponse(r'Your Account is already activated.')
+        return HttpResponseRedirect(reverse('accounts:expired'))
     
 
 def activated(request):
     return render(request,'activated.html')
 
-
+def the_link_has_been_expired(request):
+    return render(request,'link_has_been_expired.html')
 
 def username_for_reset_password(request):
     try:
