@@ -83,7 +83,7 @@ def checkout_home(request):
     billing_address_id=request.session.get('billing_address_id', None)
     shipping_address_id=request.session.get('shipping_address_id', None)
     
-    if request.method == "POST" and not request.user.is_authenticated:
+    if request.method == "POST" and not request.user.is_authenticated and not request.session.get('guest_email_id'):
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = authenticate(
