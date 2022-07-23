@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 
+
 <style>
+  .table{
+    background-color: black;
+    color:white;
+  }
   .ordertable{
     white-space: nowrap;
     overflow-x: scroll;
@@ -10,18 +15,10 @@
     
   }
   ::-webkit-scrollbar {
-    width: 1em;
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
   }
-   
-  ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   
-  }
-   
-  ::-webkit-scrollbar-thumb {
-    background-color: black;
-    
-  }
   
   .ordertable td th{
     width:100%;
@@ -30,7 +27,7 @@
   
 </style>
 <div class="ordertable">
-<table class="table text-center" id='table'>
+<table class="table text-center bg-gradient" id='table'>
     <thead>
       <tr>
         <th>Order ID</th>
@@ -46,7 +43,7 @@
         {% for i in object %}
       <tr class="">
         <th>{{i.order_id}}</th> 
-        <th>{{i.billing_address}}</th> 
+        <th>{{i.shipping_address}}</th> 
         <td>{{i.status}}</td>
         <td>{% for j in i.cart.products.all %}
           <a href={% url 'product:product_detail' slug=j.slug %}>{{j}}</a>,
