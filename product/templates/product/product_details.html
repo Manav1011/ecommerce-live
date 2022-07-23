@@ -10,7 +10,7 @@
           <br>
           {% include 'product/update_cart.html' with product=object cart=cart %}
           <br>
-          <button class="btn btn-outline-primary form-control" onclick='history.back()'>Go Back</button>
+          <a href="{% url 'products' %}" class="btn btn-outline-primary form-control">Go Back</a>
         </div>
     </div>
 </div>
