@@ -74,10 +74,10 @@ def active_account(request,username,token):
             print(SignUpView.rand_token)
             return HttpResponseRedirect(reverse('accounts:activated'))
         else:        
-            return HttpResponse(r'Your Account is already activated.')
+            return HttpResponseRedirect(reverse('accounts:expired'))
     except:
         print('exception occured')
-        return HttpResponse(r'Your Account is already activated.')
+        return HttpResponseRedirect(reverse('accounts:expired'))
     
 
 def activated(request):
