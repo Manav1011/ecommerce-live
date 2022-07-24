@@ -113,6 +113,9 @@ def reset_password_page(request,username,token):
     }
     return render(request, 'reset_password.html',context)
 
+def the_link_has_been_expired(request):
+    return render(request, 'link_has_been_expired.html')
+
 
 def reset_password(request):
     if request.method == 'POST':
