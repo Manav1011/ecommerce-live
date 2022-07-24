@@ -75,10 +75,13 @@ def active_account(request,username,token):
             return HttpResponseRedirect(reverse('accounts:activated'))
         else:        
             return HttpResponse(f'expierd SIgnup:{SignUpView.rand_token} method: {token}')
-    except:
+    except Exception as e:
+        print(e)
         print('exception occured')
         return HttpResponse('exception occured')
     
+def the_link_has_been_expired(request):
+    return render(request, 'link_has_been_expired.html')
 
 def activated(request):
     return render(request,'activated.html')
@@ -113,9 +116,6 @@ def reset_password_page(request,username,token):
     }
     return render(request, 'reset_password.html',context)
 
-def the_link_has_been_expired(request):
-    return render(request, 'link_has_been_expired.html')
-
 
 def reset_password(request):
     if request.method == 'POST':
@@ -143,6 +143,8 @@ def reset_password(request):
             return JsonResponse({'content':'Password Reset link has been expired' ,'result':'error'})
     
     
+
+
 def change_password(request):
     if request.method == 'POST':
         form=PasswordChangeForm(request.user,request.POST)
