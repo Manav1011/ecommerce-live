@@ -95,7 +95,8 @@
   <script>
     $(document).ready(function() {
       $('#submit_username').submit(function(event){
-        $('.resetpasswordmodal').html(`<div class="alert alert-primary" role="alert">
+        $('.resetpassworddiv').hide();
+        $('.resetpasswordmodal').prepend(`<div class="alert alert-primary" id='mailsending' role="alert">
           Sending Mail....
         </div>`)
           event.preventDefault()
@@ -108,17 +109,33 @@
             method:formmethod,
             data:data,
             success:function(response){
+              if(response.type =='success'){
               $('#spinner-div').removeClass('spinner-border text-primary')
               console.log(response)
               $('.resetpasswordmodal').html(`<div class="alert alert-success" role="alert">
                 Password reset link has been sent to you email
               </div>`)
+              }
+              else if(response.Exception =='occured'){
+                $('#mailsending').remove();
+                $('.resetpassworddiv').hide()
+                $('.resetpasswordmodal').prepend(`<div class="alert alert-danger exceptionalert" role="alert">
+                    ${response.content}
+                    <div class='container text-center'><button id='fillagain' class='btn btn-warning'>Fill Again</button></div>
+                </div>
+                `)
+                $('#fillagain').click(function(){
+                    $('.resetpassworddiv').show()
+                    $('.exceptionalert').remove()
+                })
+            }
             },
             error:function(errorData){
               console.log(errorData)
             }          
           })
       })  
+
 
 
 

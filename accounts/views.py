@@ -74,17 +74,16 @@ def active_account(request,username,token):
             print(SignUpView.rand_token)
             return HttpResponseRedirect(reverse('accounts:activated'))
         else:        
-            return HttpResponseRedirect(reverse('accounts:expired'))
+            return HttpResponse(r'Your Account is already activated.')
     except:
         print('exception occured')
-        return HttpResponseRedirect(reverse('accounts:expired'))
+        return HttpResponse(r'Your Account is already activated.')
     
 
 def activated(request):
     return render(request,'activated.html')
 
-def the_link_has_been_expired(request):
-    return render(request,'link_has_been_expired.html')
+
 
 def username_for_reset_password(request):
     try:
@@ -101,10 +100,11 @@ def username_for_reset_password(request):
         print(send_mail(subject, plain_message, email_from, recipirent_list, html_message=html_message,fail_silently=False)) 
         username_for_reset_password.current_time=datetime.datetime.now()
         print(username_for_reset_password.current_time)
-        return HttpResponse('Form has been submitted')
+        return JsonResponse({'type':'success'})
     except Exception as e:
-        print(e)
-        return HttpResponse('Form has not been submitted')
+        error=str(e)
+        print('Exception Occured')
+        return JsonResponse({'Exception':'occured','content':error})
     
 def reset_password_page(request,username,token):
     context={
