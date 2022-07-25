@@ -86,7 +86,7 @@ class SignupProcess():
                     return HttpResponseRedirect(reverse('accounts:activated'))
                 else:        
                     print('time over')
-                    return HttpResponseRedirect(reverse('accounts:expired'))            
+                    return HttpResponseRedirect(reverse('accounts:expired',kwargs={'encoded':encoded}))            
             except:
                 print('exception occured')
                 return HttpResponseRedirect(reverse('accounts:active'))
