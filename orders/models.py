@@ -34,24 +34,20 @@ class OrderManager(models.Manager):
         return obj, created
 
 class Order_Log(models.Model):
-    Billing_profile = models.ForeignKey(
-        BillingProfile, on_delete=models.CASCADE, blank=True, null=True,related_name='billingprofile')
+    Billing_profile = models.CharField(
+        max_length=200, blank=True, null=True)
     Order_id = models.CharField(
         max_length=255, unique=True, blank=True, null=True)
-    Shipping_address = models.ForeignKey(
-        Address,related_name='shippingaddress',on_delete=models.CASCADE, null=True, blank=True)
-    Billing_address = models.ForeignKey(
-        Address,related_name='billingaddress', on_delete=models.CASCADE, null=True, blank=True)
-    Cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    Shipping_address = models.CharField(max_length=255,null=True, blank=True)
+    Billing_address =models.CharField(max_length=255,null=True, blank=True)
+    cart = models.CharField(max_length=255,null=True, blank=True)
     Status = models.CharField(
         max_length=255, default='created', choices=ORDER_STATUS_CHOICES)
     post_status=models.CharField(max_length=255, default='deleted')
-    Shipping_total = models.DecimalField(
-        max_digits=100, default=5.99, decimal_places=2)
-    Order_total = models.DecimalField(
-        max_digits=100, default=0.00, decimal_places=2)
-    Active = models.BooleanField(default=True)
-    Timestamp=models.DateTimeField(auto_now_add=True,blank=True,null=True)
+    Shipping_total =models.CharField(max_length=255,null=True, blank=True)
+    Order_total = models.CharField(max_length=255,null=True, blank=True)
+    Active = models.CharField(max_length=255,null=True, blank=True)
+    Timestamp=models.CharField(max_length=255,null=True, blank=True)
     
     
     def __str__(self):
@@ -115,7 +111,6 @@ def post_delete_order(instance,sender,*args,**kwargs):
         Order_id=instance.order_id,
         Shipping_address=instance.shipping_address,
         Billing_address=instance.billing_address,
-        Cart=instance.cart,
         Status=instance.status,
         Shipping_total=instance.shipping_total,
         Order_total=instance.order_total,
