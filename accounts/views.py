@@ -73,17 +73,17 @@ class SignupProcess():
                 print(SignupProcess.rand_token)
                 return HttpResponseRedirect(reverse('accounts:activated'))
             else:        
-                return HttpResponse(r'Your Account is already activated.')
-        except:
+                return HttpResponseRedirect(reverse('expired',kwargs={'error':''}))
+        except Exception as e:
             print('exception occured')
-            return HttpResponse(r'Your Account is already activated.')
+            return HttpResponseRedirect(reverse('expired', kwargs={'error':e}))
         
 
     def activated(request):
         return render(request,'activated.html')
 
-    def the_link_has_been_expired(request):
-        return render(request, 'link_has_been_expired.html')
+    def the_link_has_been_expired(request,error):
+        return render(request, 'link_has_been_expired.html',{'error':error})
 
 
 
