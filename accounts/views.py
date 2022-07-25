@@ -50,7 +50,7 @@ class SignupProcess():
                 usernames=request.POST.get('username')
                 message=jwt.encode({
                     'username':usernames,
-                    'time':current_time
+                    'time':current_time,
                 },'djangoecommerce',algorithm="HS256")
                 
                 subject='Account Activation From eCommerce Website'
@@ -77,15 +77,20 @@ class SignupProcess():
             print('user exists')
             return HttpResponseRedirect(reverse('accounts:expired'))
         except Exception as e:
-            print(e)
-            timedelta=responsetime-decoded['time']
-            print(timedelta/60)
-            if timedelta/60 < 5:
-                SignupProcess.form.save(commit=True)
-                return HttpResponseRedirect(reverse('accounts:activated'))
-            else:        
-                print('time over')
-                return HttpResponseRedirect(reverse('accounts:expired'))            
+            try:
+                print(e)
+                timedelta=responsetime-decoded['time']
+                print(timedelta/60)
+                if timedelta/60 < 5:
+                    SignupProcess.form.save(commit=True)
+                    return HttpResponseRedirect(reverse('accounts:activated'))
+                else:        
+                    print('time over')
+                    return HttpResponseRedirect(reverse('accounts:expired'))            
+            except:
+                print('exception occured')
+                return HttpResponseRedirect(reverse('accounts:active'))
+                
             
         
 
