@@ -5,7 +5,7 @@ app_name='accounts'
 
 urlpatterns=[
     re_path(r'^$',views.SignupProcess.SignUpView,name='signup'),    
-    path('active/<str:username>/<str:token>',views.SignupProcess.active_account,name='active'),
+    path('active/<str:encoded>',views.SignupProcess.active_account,name='active'),
     re_path(r'^Activated/$',views.SignupProcess.activated,name='activated'),
     re_path(r'^Expired/$',views.SignupProcess.the_link_has_been_expired,name='expired'),
     re_path(r'^username_for_reset_password/$',views.username_for_reset_password,name='username_for_reset_password'),

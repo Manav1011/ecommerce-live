@@ -1,3 +1,4 @@
+from email.mime import base
 from django.shortcuts import render,redirect
 from django.urls import reverse,reverse_lazy
 from . import forms
@@ -13,6 +14,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth import update_session_auth_hash
 from uuid import uuid4
 import datetime
+import json
+import time
+import jwt
 
 # Create your views here.
 
@@ -38,16 +42,22 @@ class SignupProcess():
         SignupProcess.form=forms.SignUpForm(request.POST or None)    
         if SignupProcess.form.is_valid():
             try:
-                SignupProcess.rand_token = uuid4()
-                print(SignupProcess.rand_token)
-                str_token=str(SignupProcess.rand_token)
+                # SignupProcess.rand_token = uuid4()
+                # print(SignupProcess.rand_token)
+                # str_token=str(SignupProcess.rand_token)
+                # SignupProcess.current_time=datetime.datetime.now()
+                current_time=time.time()
+                usernames=request.POST.get('username')
+                message=jwt.encode({
+                    'username':usernames,
+                    'time':current_time
+                },'djangoecommerce',algorithm="HS256")
+                
                 subject='Account Activation From eCommerce Website'
-                html_message = render_to_string('account_activation.html',{'domain':request.get_host(),'username':request.POST.get('username'),'token':str_token})
+                html_message = render_to_string('account_activation.html',{'domain':request.get_host(),'encoded':message})
                 plain_message = strip_tags(html_message)
                 email_from ='manavshah1011.ms@gmail.com'
                 send_mail(subject, plain_message, email_from, [request.POST.get('email'),], html_message=html_message,fail_silently=False)
-                SignupProcess.current_time=datetime.datetime.now()
-                print(SignupProcess.current_time)
                 return JsonResponse({'url':'accounts:check','type':'success'})
             except Exception as e:
                 print(e)
@@ -58,25 +68,25 @@ class SignupProcess():
             return JsonResponse({'errors':SignupProcess.form.errors.as_json(),'type':'error'},safe=False)
 
         
-    def active_account(request,username,token):
-        token=token
-        print(token)
-        username=username
-        responsetime=datetime.datetime.now()
+    def active_account(request,encoded):
+        decoded=jwt.decode(encoded,'djangoecommerce',algorithms="HS256")
+        username=decoded['username']
+        responsetime=time.time()
         try:
-            timedelta=responsetime-SignupProcess.current_time
-            print(timedelta.total_seconds()/60)
-            print(SignupProcess.rand_token)
-            if token==str(SignupProcess.rand_token) and timedelta.total_seconds()/60 <=5:
+            User.objects.get(username=username)
+            print('user exists')
+            return HttpResponseRedirect(reverse('accounts:expired'))
+        except Exception as e:
+            print(e)
+            timedelta=responsetime-decoded['time']
+            print(timedelta/60)
+            if timedelta/60 < 5:
                 SignupProcess.form.save(commit=True)
-                SignupProcess.rand_token= uuid4()
-                print(SignupProcess.rand_token)
                 return HttpResponseRedirect(reverse('accounts:activated'))
             else:        
-                return HttpResponseRedirect(reverse('expired'))
-        except Exception as e:
-            print('exception occured')
-            return HttpResponseRedirect(reverse('expired'))
+                print('time over')
+                return HttpResponseRedirect(reverse('accounts:expired'))            
+            
         
 
     def activated(request):

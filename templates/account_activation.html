@@ -10,7 +10,7 @@
     <div style='text-align: center; border: 3px solid green;'>
         <h1>Heyy {{username}} Here is you account activation link</h1>
         <h3>This link is one time link and will expire after 5 minutes</h3>
-        <p>http://{{domain}}{% url 'accounts:active' username=username token=token%}</p>
+        <p>http://{{domain}}{% url 'accounts:active' encoded=encoded%}</p>
     </div>
 </body>
 </html>
