@@ -85,10 +85,10 @@
         <h3 class="text-center">Billing Address Form</h3>
         <hr>
         <div class="row">
-            {% include 'addresses/form.html' with address_type='billing'%}
+            {% include 'addresses/previous_addresses.html' with address_qs=address_qs next_url=next address_type='billing'%}
         </div>
         <div class="row">
-            {% include 'addresses/previous_addresses.html' with address_qs=address_qs next_url=next address_type='billing'%}
+            {% include 'addresses/form.html' with address_type='billing'%}
         </div>
         </div>
         {% else %}

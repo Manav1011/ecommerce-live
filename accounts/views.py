@@ -41,16 +41,13 @@ class SignupProcess():
     def SignUpView(request):
         SignupProcess.form=forms.SignUpForm(request.POST or None)    
         if SignupProcess.form.is_valid():
-            try:
-                # SignupProcess.rand_token = uuid4()
-                # print(SignupProcess.rand_token)
-                # str_token=str(SignupProcess.rand_token)
-                # SignupProcess.current_time=datetime.datetime.now()
+            try:                
                 current_time=time.time()
                 usernames=request.POST.get('username')
                 message=jwt.encode({
                     'username':usernames,
                     'time':current_time,
+                    'form_data':SignupProcess.form.cleaned_data
                 },'djangoecommerce',algorithm="HS256")
                 
                 subject='Account Activation From eCommerce Website'
@@ -71,27 +68,28 @@ class SignupProcess():
     def active_account(request,encoded):
         decoded=jwt.decode(encoded,'djangoecommerce',algorithms="HS256")
         username=decoded['username']
+        email=decoded['form_data']['email']
+        password=decoded['form_data']['password1']
         responsetime=time.time()
         try:
             User.objects.get(username=username)
             print('user exists')
             return HttpResponseRedirect(reverse('accounts:expired'))
         except Exception as e:
-            try:
-                print(e)
-                timedelta=responsetime-decoded['time']
-                print(timedelta/60)
-                if timedelta/60 < 5:
-                    SignupProcess.form.save(commit=True)
-                    return HttpResponseRedirect(reverse('accounts:activated'))
-                else:        
-                    print('time over')
-                    return HttpResponseRedirect(reverse('accounts:expired'))            
-            except:
-                print('exception occured')
-                return HttpResponseRedirect(reverse('accounts:active',kwargs={'encoded':encoded}))
-                
-            
+            print(e)
+            timedelta=responsetime-decoded['time']
+            print(timedelta/60)
+            if timedelta/60 < 5:
+                user=User(username=username)
+                user.email=email
+                user.set_password(password)
+                user.save()
+                return HttpResponseRedirect(reverse('accounts:activated'))
+            else:        
+                print('time over')
+                return HttpResponseRedirect(reverse('accounts:expired'))            
+          
+      
         
 
     def activated(request):
