@@ -1,5 +1,3 @@
-# The site's up and running [Here](https://manav-shah-django-ecommerce.herokuapp.com)
-
 ## I have built this site using django web framework
 
 <table class="table table-light border border-success border-5">
